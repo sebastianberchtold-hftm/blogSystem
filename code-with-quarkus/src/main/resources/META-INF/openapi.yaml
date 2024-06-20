@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Blog-System API
+  version: 1.0.0
+  description: Eine API für das Verwalten von Blog-Posts.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/posts:
+    post:
+      summary: Erstellt einen neuen Blog-Post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        '201':
+          description: Blog-Post erfolgreich erstellt.
+        '400':
+          description: Ungültige Eingabedaten.
+    get:
+      summary: Gibt eine Liste von Blog-Posts zurück.
+      parameters:
+        - in: query
+          name: author
+          schema:
+            type: string
+          description: Der Autor des Blog-Posts
+      responses:
+        '200':
+          description: Liste der Blog-Posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogPost'
+  /api/posts/{id}:
+    get:
+      summary: Gibt die Details eines bestimmten Blog-Posts zurück.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Die ID des Blog-Posts.
+      responses:
+        '200':
+          description: Blog-Post gefunden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '404':
+          description: Blog-Post nicht gefunden.
+    put:
+      summary: Aktualisiert einen bestehenden Blog-Post.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Die ID des Blog-Posts.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        '200':
+          description: Blog-Post erfolgreich aktualisiert.
+        '404':
+          description: Blog-Post nicht gefunden.
+    delete:
+      summary: Löscht einen Blog-Post.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Die ID des Blog-Posts.
+      responses:
+        '204':
+          description: Blog-Post erfolgreich gelöscht.
+        '404':
+          description: Blog-Post nicht gefunden.
+components:
+  schemas:
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
