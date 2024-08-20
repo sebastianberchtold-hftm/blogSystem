@@ -1,7 +1,9 @@
 package blog.endpoints;
 
-import blog.entity.Blog;
-import blog.repository.BlogRepository;
+import java.util.List;
+
+import blog.control.BlogService;
+import blog.model.BlogDTO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -15,47 +17,42 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/blogs")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class BlogResource {
 
     @Inject
-    BlogRepository blogRepository;
+    BlogService blogService;
 
     @GET
-    public Response getAllBlogs() {
-        return Response.ok(blogRepository.findAll()).build();
-    }
-
-    @GET
-    @Path("{id}")
-    public Response getBlogById(@PathParam("id") Long id) {
-        Blog blog = blogRepository.findById(id);
-        return Response.ok(blog).build();
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<BlogDTO> getAllBlogs() {
+        return blogService.getAllBlogs();
     }
 
     @POST
-    public Response createBlog(Blog blog) {
-        blogRepository.persist(blog);
-        return Response.status(Response.Status.CREATED).entity(blog).build();
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createBlog(BlogDTO blogDTO) {
+        BlogDTO createdBlog = blogService.createBlog(blogDTO);
+        return Response.status(Response.Status.CREATED).entity(createdBlog).build();
     }
 
     @PUT
-    @Path("{id}")
-    public Response updateBlog(@PathParam("id") Long id, Blog updatedBlog) {
-        Blog blog = blogRepository.findById(id);
-        blog.setTitle(updatedBlog.getTitle());
-        blog.setAuthor(updatedBlog.getAuthor());
-        blog.setContent(updatedBlog.getContent());
-        blogRepository.persist(blog);
-        return Response.ok(blog).build();
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateBlog(@PathParam("id") Long id, BlogDTO blogDTO) {
+        BlogDTO updatedBlog = blogService.updateBlog(id, blogDTO);
+        if (updatedBlog != null) {
+            return Response.ok(updatedBlog).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/{id}")
     public Response deleteBlog(@PathParam("id") Long id) {
-        Blog blog = blogRepository.findById(id);
-        blogRepository.delete(blog);
+        blogService.deleteBlog(id);
         return Response.noContent().build();
     }
 }

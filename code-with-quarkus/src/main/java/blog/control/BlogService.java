@@ -1,29 +1,54 @@
 package blog.control;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import blog.entity.Blog;
+import blog.model.BlogDTO;
 import blog.repository.BlogRepository;
-import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 
 @Dependent
 public class BlogService {
     @Inject
     BlogRepository blogRepository;
 
-    public List<Blog> getAllBlogs() {
-        var blogs = blogRepository.listAll();
-        Log.info("Returning " + blogs.size() + " blogs");
-
-        return blogs;
+    public Blog fromDTO(BlogDTO blogDTO) {
+        Blog blog = new Blog();
+        blog.setTitle(blogDTO.title());
+        blog.setContent(blogDTO.content());
+        return blog;
     }
 
-    @Transactional
-    public void addBlog(Blog blog) {
-        Log.info("Adding blog " + blog.getTitle());
+    public BlogDTO toDTO(Blog blog) {
+        return new BlogDTO(blog.getTitle(), blog.getContent());
+    }
+
+    public List<BlogDTO> getAllBlogs() {
+        return blogRepository.listAll().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public BlogDTO createBlog(BlogDTO blogDTO) {
+        Blog blog = fromDTO(blogDTO);
         blogRepository.persist(blog);
+        return toDTO(blog);
+    }
+
+    public BlogDTO updateBlog(Long id, BlogDTO blogDTO) {
+        Blog blog = blogRepository.findById(id);
+        if (blog != null) {
+            blog.setTitle(blogDTO.title());
+            blog.setContent(blogDTO.content());
+            blogRepository.persist(blog);
+            return toDTO(blog);
+        }
+        return null;
+    }
+
+    public void deleteBlog(Long id) {
+        blogRepository.deleteById(id);
     }
 }
