@@ -31,6 +31,10 @@ public class BlogService {
                 .collect(Collectors.toList());
     }
 
+    public BlogDTO getBlogById(Long id) {
+        return toDTO(blogRepository.findById(id));
+    }
+
     public BlogDTO createBlog(BlogDTO blogDTO) {
         Blog blog = fromDTO(blogDTO);
         blogRepository.persist(blog);

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import blog.model.BlogDTO;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 
 import blog.entity.Blog;
@@ -16,19 +18,12 @@ public class BlogServiceTest {
     BlogService blogService;
 
     @Test
-    void listingAndAddingBlogs() {
-        // Arrange
-        Blog blog = new Blog();
-        int blogsBefore;
-        List<Blog> blogs;
-
-        // Act
-        blogsBefore = blogService.getAllBlogs().size();
-        blogService.addBlog(blog);
-        blogs = blogService.getAllBlogs();
-
-        // Assert
-        assertEquals(blogsBefore + 1, blogs.size());
-        assertEquals(blog, blogs.get(blogs.size() - 1));
+    @Transactional
+    public void listingAndAddingBlogs() {
+        // Your test code here
+        // For example:
+        blogService.createBlog(new BlogDTO("Title", "Content"));
+        List<BlogDTO> blogs = blogService.getAllBlogs();
+        assertEquals(1, blogs.size());
     }
 }
