@@ -247,17 +247,48 @@ services:
 
 4. Die Anwendung ist jetzt unter `http://localhost:8081` erreichbar.
 
-## Docker Image
+Ein öffentliches Docker-Image für das Blog-System ist im GitHub-Paket-Registry verfügbar.
 
-A public Docker image for the Blog System is available on GitHub Packages.
+### Docker-Image abrufen
 
-### Pull the Docker Image
-
-To pull the image, use the following command:
+Um das Image herunterzuladen, verwenden Sie den folgenden Befehl:
 
 ```bash
-docker pull ghcr.io/<your-github-username>/blogSystem:latest
+docker pull ghcr.io/<dein-github-username>/blogSystem:latest
+```
 
+## Ausführen des Docker-Containers
+Um den Container auszuführen, verwenden Sie:
+
+```bash
+docker run -d \
+  -e DB_HOST=<db_host> \
+  -e DB_USER=<db_user> \
+  -e DB_PASSWORD=<db_password> \
+  -e AUTH_SERVER_URL=<auth_server_url> \
+  -p 8080:8080 \
+  ghcr.io/<dein-github-username>/blogSystem:latest
+```
+
+## Beispiel für Authentifizierung und Zugriff
+Sie können sich authentifizieren und das System mit den folgenden Befehlen testen:
+
+- Token abrufen (ersetzen Sie <benutzername> und <passwort> durch Ihre Anmeldedaten):
+
+```bash
+curl -X POST <auth_server_url>/token -d "username=<benutzername>&password=<passwort>"
+```
+- Zugriff auf die API: Verwenden Sie das Token, um auf geschützte Ressourcen zuzugreifen:
+
+```bash
+curl -H "Authorization: Bearer <dein_access_token>" http://localhost:8080/api/endpoint
+```
+
+## Erforderlich Untersysteme
+Stellen Sie sicher, dass die folgenden Untersysteme ausgeführt werden:
+
+- Datenbank: Stellen Sie sicher, dass Ihre Datenbank läuft und zugänglich ist.
+- Authentifizierungsserver: Stellen Sie sicher, dass Ihr Authentifizierungsserver aktiv ist.
 
 ## Beitrag und Support
 
