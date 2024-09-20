@@ -247,6 +247,17 @@ services:
 
 4. Die Anwendung ist jetzt unter `http://localhost:8081` erreichbar.
 
+## Docker Image
+
+A public Docker image for the Blog System is available on GitHub Packages.
+
+### Pull the Docker Image
+
+To pull the image, use the following command:
+
+```bash
+docker pull ghcr.io/<your-github-username>/blogSystem:latest
+
 
 ## Beitrag und Support
 
