@@ -281,7 +281,7 @@ curl -X POST <auth_server_url>/token -d "username=<benutzername>&password=<passw
 - Zugriff auf die API: Verwenden Sie das Token, um auf geschützte Ressourcen zuzugreifen:
 
 ```bash
-curl -H "Authorization: Bearer <dein_access_token>" http://localhost:8080/api/endpoint
+curl -H "Authorization: Bearer <dein_access_token>" http://localhost:8081/api/endpoint
 ```
 
 ## Erforderlich Untersysteme
