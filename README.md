@@ -68,8 +68,7 @@ Die API gibt standardisierte Fehlercodes und Nachrichten zurück, falls Probleme
 - **404 Not Found**: Wenn ein Blogpost mit der angegebenen ID nicht gefunden werden kann.
 - **400 Bad Request**: Wenn die Anforderung fehlerhafte Daten enthält.
 
-
-# BlogSystem
+## Docker
 
 Dieses Projekt ist eine Quarkus-basierte Blog-Applikation mit Keycloak-Authentifizierung und Docker-Containerisierung.
 
