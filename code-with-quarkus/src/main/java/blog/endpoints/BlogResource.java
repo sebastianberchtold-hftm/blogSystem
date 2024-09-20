@@ -22,7 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
-@Path("/blogs")
+@Path("/api/blogs")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BlogResource {
@@ -31,10 +31,12 @@ public class BlogResource {
     BlogService blogService;
 
     @GET
+    @Operation(summary = "Get all blogs", description = "Retrieves a list of all blog entries")
+    @APIResponse(responseCode = "200", description = "List of blog entries retrieved successfully",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = BlogDTO.class)))
     public List<BlogDTO> getAllBlogs() {
         return blogService.getAllBlogs();
     }
-
     @GET
     @Path("{id}")
     public BlogDTO getBlog(@PathParam("id") Long id) {
